@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shield Admin Panel</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+    .header {
+        background-color: #222;
+        padding: 10px 0;
+        text-align: center;
+    }
+    .header h1 {
+        margin: 0;
+    }
+    .tabs {
+        display: flex;
+        justify-content: space-between;
+        background-color: #333;
+        padding: 10px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    .tab {
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+        padding: 15px 0;
+        border-bottom: 4px solid transparent;
+        transition: border-bottom-color 0.3s ease;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .tab.active {
+        border-bottom-color: #4CAF50;
+    }
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        height: 80vh;
+    }
+    .subscription-box,
+    .help-box,
+    .discord-box,
+    .re-subscription-box,
+    .note-box {
+        background-color: #222;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+        display: none; /* Initially hide all content boxes */
+    }
+    .subscription-box.active,
+    .help-box.active,
+    .discord-box.active,
+    .re-subscription-box.active,
+    .note-box.active {
+        display: block; /* Show active content box */
+    }
+    .subscription-box h2,
+    .help-box h2,
+    .discord-box h2,
+    .re-subscription-box h2,
+    .note-box h2 {
+        margin-bottom: 20px;
+    }
+    .subscription-options {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+    .subscription-option {
+        border: 2px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #fff;
+        text-decoration: none; /* Added to remove underline */
+        display: inline-block; /* Added to ensure it behaves as a link */
+        margin-top: 10px; /* Added for spacing */
+    }
+    .subscription-option:hover {
+        background-color: #444;
+    }
+    .subscription-option.active {
+        background-color: #4CAF50;
+        border-color: #4CAF50;
+    }
+    .subscribe-button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px; /* Added for spacing */
+    }
+    .subscribe-button:hover {
+        background-color: #45a049;
+    }
+    .rating-stars {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .rating-star {
+        font-size: 24px;
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.3s ease;
+    }
+    .rating-star:hover,
+    .rating-star.active {
+        color: #ffcc00;
+    }
+    /* Style for the textarea */
+    #note-text {
+        background-color: black;
+        color: white;
+        font-family: Arial, sans-serif; /* Example of a good font */
+        font-size: 16px; /* Adjust size as needed */
+        padding: 10px;
+        width: 100%; /* Adjust width as needed */
+        height: 200px; /* Adjust height as needed */
+        border: 2px solid white; /* Optional: Add a border */
+        resize: none; /* Optional: Disable resizing */
+        margin-bottom: 20px; /* Added for spacing */
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>SHIELD</h1>
+</div>
+
+<div class="tabs">
+    <div class="tab active" onclick="showTab('subscription')">Subscription</div>
+    <div class="tab" onclick="showTab('re-subscription')">Re-Subscription</div>
+    <div class="tab" onclick="showTab('help')">Help</div>
+    <div class="tab" onclick="showTab('discord')">Discord</div>
+    <div class="tab" onclick="showTab('notes')">Notes</div>
+</div>
+
+<div class="content">
+    <div class="subscription-box active">
+        <h2>Choose Your Subscription Plan</h2>
+        <p>Verification will be done, no scam is accepted.</p>
+        
+        <div class="subscription-options">
+            <div class="subscription-option" data-price="10">Normal: 400 R$</div>
+            <div class="subscription-option" data-price="50">VIP: 500 R$</div>
+            <div class="subscription-option" data-price="180">Premium: 600 R$</div>
+        </div>
+        
+        <button class="subscribe-button" onclick="purchaseSubscription()">Subscribe Now</button>
+    </div>
+
+    <div class="re-subscription-box">
+        <h2>Re-Subscription Options</h2>
+        <p>WARNING! If you haven't bought the subscription that you are re-subscribing to you won't get it. A verify will be done, and no repay will be done.</p>
+        <div class="subscription-options">
+            <div class="subscription-option" data-price="10">Normal: 400 R$</div>
+            <div class="subscription-option" data-price="50">VIP: 500 R$</div>
+            <div class="subscription-option" data-price="180">Premium: 600 R$</div>
+        </div>
+        
+        <button class="subscribe-button" onclick="purchaseSubscription()">Subscribe Now</button>
+    </div>
+    
+    <div class="help-box">
+        <h2>Help for setup</h2>
+        <p>Do you need help with setup? Go on our discord!</p>
+    </div>
+
+    <div class="discord-box">
+        <h2>Join Our Discord</h2>
+        <p>If you need help DM owner.</p>
+        <!-- Replace the following div with an anchor tag -->
+        <a href="https://discord.gg/w7FfCBknNH" class="subscription-option" target="_blank">Discord</a>
+    </div>
+
+    <div class="note-box">
+        <h2>Note us!</h2>
+        <p>If you need help DM owner.</p>
+        <div class="rating-stars">
+            <span class="rating-star" onclick="rate(1)">★</span>
+            <span class="rating-star" onclick="rate(2)">★</span>
+            <span class="rating-star" onclick="rate(3)">★</span>
+            <span class="rating-star" onclick="rate(4)">★</span>
+            <span class="rating-star" onclick="rate(5)">★</span>
+        </div>
+
+        <textarea id="note-text" placeholder="Write your note here..."></textarea>
+
+        <button class="subscribe-button" onclick="saveNote()">Save</button>
+    </div>
+</div>
+
+<!-- Copyright notice moved to the end of body -->
+<p style="text-align: center; color: #ccc; margin-bottom: 20px;">Shield Admin Panel Copyright 2024: &lt;!DOCTYPE html&gt;</p>
+
+<script>
+    let currentRating = 0;
+
+    function showTab(tabName) {
+        // Hide all content areas
+        document.querySelectorAll('.subscription-box, .help-box, .discord-box, .re-subscription-box, .note-box').forEach(box => {
+            box.classList.remove('active');
+        });
+        
+        // Deactivate all tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Activate the selected tab and corresponding content area
+        switch (tabName) {
+            case 'subscription':
+                document.querySelector('.subscription-box').classList.add('active');
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                break;
+            case 're-subscription':
+                document.querySelector('.re-subscription-box').classList.add('active');
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                break;
+            case 'help':
+                document.querySelector('.help-box').classList.add('active');
+                document.querySelector('.tab:nth-child(3)').classList.add('active');
+                break;
+            case 'discord':
+                document.querySelector('.discord-box').classList.add('active');
+                document.querySelector('.tab:nth-child(4)').classList.add('active');
+                break;
+            case 'notes':
+                document.querySelector('.note-box').classList.add('active');
+                document.querySelector('.tab:nth-child(5)').classList.add('active');
+                loadNotes();
+                break;
+            default:
+                break;
+        }
+    }
+
+    function rate(stars) {
+        currentRating = stars;
+        document.querySelectorAll('.rating-star').forEach((star, index) => {
+            if (index < stars) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+
+    function saveNote() {
+        let noteText = document.getElementById('note-text').value.trim();
+        if (currentRating === 0) {
+            alert('Please rate the note.');
+            return;
+        }
+        if (noteText === '') {
+            alert('Please enter a note.');
+            return;
+        }
+
+        // Save note and rating to data.txt
+        let note = `Rating: ${currentRating} stars\nNote: ${noteText}\n\n`;
+        let textarea = document.getElementById('note-list');
+        textarea.value += note;
+
+        // Save to data.txt
+        let fileContent = textarea.value;
+        saveToFile('data.txt', fileContent);
+
+        // Reset rating and note text
+        currentRating = 0;
+        document.querySelectorAll('.rating-star').forEach(star => star.classList.remove('active'));
+        document.getElementById('note-text').value = '';
+        alert('Note saved successfully!');
+    }
+
+    function saveToFile(filename, content) {
+        let blob = new Blob([content], { type: 'text/plain' });
+        let url = URL.createObjectURL(blob);
+
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+    function loadNotes() {
+        // Simulating loading notes from a file
+        fetch('data.txt')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('note-list').value = data;
+            })
+            .catch(error => console.error('Error loading notes:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Default to showing the subscription tab
+        showTab('subscription');
+
+        // Add click event listeners to tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                showTab(tab.textContent.trim().toLowerCase());
+            });
+        });
+
+        // Add click event listeners to subscription options
+        document.querySelectorAll('.subscription-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.subscription-option').forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
